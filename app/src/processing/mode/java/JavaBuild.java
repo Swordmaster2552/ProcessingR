@@ -232,7 +232,18 @@ public class JavaBuild {
     for (SketchCode sc : sketch.getCode()) {
       if (sc.isExtension("pde")) {
         sc.setPreprocOffset(bigCount);
-        bigCode.append(sc.getProgram());
+	
+	String codeSnip = sc.getProgram();
+	List<String> snipLines = removeJavaScript(codeSnip);
+	//Join the list of lines back into a string
+	StringBuilder builder = new StringBuilder();
+	for(String s: snipLines)
+	{
+		builder.append(s);
+		builder.append('\n');
+	}
+
+        bigCode.append(builder.toString());
         bigCode.append('\n');
         bigCount += sc.getLineCount();
       }
@@ -1706,5 +1717,41 @@ public class JavaBuild {
         }
       }
     }
+  }
+  /**
+   * Removes code that is only for Javascript Mode via a simple preprocessor directive
+   * */ 
+  private ArrayList<String> removeJavaScript(String input)
+  {
+	String lines[] = input.split("\\r?\\n");
+	ArrayList<String> cleanLines = new ArrayList<String>(lines.length);
+
+	boolean addLine =true;
+	for(int x =0;x < lines.length;x++)
+	{
+		String line = lines[x].toLowerCase();
+		if(addLine)
+		{
+			//Check for start string
+			if(line.indexOf("@startjs") != -1 && line.indexOf("*/")!=-1)
+			{
+				addLine =false;
+			}
+			else
+			{
+				cleanLines.add(lines[x]);
+			}
+		}
+		else
+		{
+			//Check for termination string
+			if(line.indexOf("@endjs") != -1 && line.indexOf("*/")!=-1)
+			{
+				addLine = true;
+			}
+		}
+	}
+	return cleanLines;
+
   }
 }
