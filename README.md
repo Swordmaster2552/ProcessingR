@@ -1,4 +1,5 @@
-Processing with JavaScript Preprocessor
+ProcessingR
+A Processing Fork with JavaScript Preprocessor
 ==========
 
 This build of Processing ignores any code between the following tags:
@@ -7,5 +8,10 @@ This build of Processing ignores any code between the following tags:
 Put incompatible Javascript stuff here.
 /* @endJS */
 
-To download: 
+Downloads:
+Copy the .exe into your current processing folder and it should be able to run.
+**Windows only for now. I don't have the knowhow or hardware to build for OSX and Linux.
+
+Examples:
+
 
